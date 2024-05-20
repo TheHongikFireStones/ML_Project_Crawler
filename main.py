@@ -9,7 +9,7 @@ import urllib.request
 driver = webdriver.Chrome() #크롬 웹드라이버를 열기
 driver.get("https://www.google.co.kr/imghp?hl=en&tab=ri&ogbl") #구글이미지검색 창으로
 elem = driver.find_element(By.NAME, "q") #검색창을 찾기
-elem.send_keys("Hrithik Roshan face") #우리의 키워드 입력하기
+elem.send_keys("Varun Dhawan face") #우리의 키워드 입력하기
 elem.send_keys(Keys.RETURN) #enter키
 
 # [스크롤 내리기]
@@ -36,19 +36,28 @@ while True:
 print("-----")
 
 # 검색했을 때 나오는 작은 이미지들이 가지는 공통된 클래스를 입력
-images = driver.find_elements(By.CSS_SELECTOR,'.eA0Zlc') #검색했을 때 나오는 작은 썸네일의 사진들 class 지정
+images = driver.find_elements(By.CSS_SELECTOR,'.YQ4gaf') #검색했을 때 나오는 작은 썸네일의 사진들 class 지정
+print(images)
+for image in images:
+    className = image.get_dom_attribute("class")
+    if len(className) > 6:
+        images.remove(image)
+
+
 count = 1 #이미지의 개수
 for image in images:
     try:
-        if count == 150:
+        if count == 300:
             exit()
-        image.click() #이미지들 중 하나를 클릭
-        time.sleep(1.3) #큰 이미지가 나오는데 로딩될 때까지 기다려줌 (3초) (로딩되는데 시간 걸리므로)
-        # 작은 이미지를 클릭했을 때 나오는 큰 이미지들의 xpath
-        imgUrl = driver.find_element(By.XPATH ,'/html/body/div[6]/div/div/div/div/div/div/c-wiz/div/div[2]/div[2]/div[2]/div[2]/c-wiz/div/div/div/div/div[3]/div[1]/a/img').get_attribute("src") #큰 이미지의 src가져오기
-        urllib.request.urlretrieve(imgUrl, 'C:\\Users\\MINUK\\Desktop\\CS 2023-2\\db\\pythonProject\\img' + '/' +str(count) + ".jpg") #이미지 다운로드 받기
+#         # image.click() #이미지들 중 하나를 클릭
+#         # time.sleep(1.3) #큰 이미지가 나오는데 로딩될 때까지 기다려줌 (3초) (로딩되는데 시간 걸리므로)
+#         # 작은 이미지를 클릭했을 때 나오는 큰 이미지들의 xpath
+#         # imgUrl = driver.find_element(By.XPATH ,'/html/body/div[4]/div/div[13]/div/div[2]/div[2]/div/div/div/div/div[1]/div/div/div[4]/div[2]/h3/a/div/div/div/g-img/img').get_attribute("src") #큰 이미지의 src가져오기
+        imgUrl = image.get_attribute('src')
+        urllib.request.urlretrieve(imgUrl, 'C:\\Users\\MINUK\\Desktop\\CS 2023-2\\db\\pythonProject\\img' + '/Varun_Dhawan/' +str(count) + ".jpg") #이미지 다운로드 받기
         count = count + 1
-    except:
+    except Exception as e:
+        print(e)
         pass
 
 driver.close() #브라우저 창을 닫아주기
